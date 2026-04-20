@@ -1,8 +1,13 @@
 import './style.css'
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = 'https://mqbubmrsgiixnyroqsys.supabase.co'
+const supabaseKey = 'sb_publishable_CVPwjFmjPNAEMIGrbZfQ_g_bzD5DlIO'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 // Initial State
 let state = {
-  posts: JSON.parse(localStorage.getItem('ansan-complaints')) || [],
+  posts: [],
   isAdmin: false,
   editingId: null,
   images: [],
@@ -54,8 +59,34 @@ const sliderDots = document.querySelectorAll('.dot');
 
 // --- Helper Functions ---
 
-const saveToLocal = () => {
-  localStorage.setItem('ansan-complaints', JSON.stringify(state.posts));
+const fetchPosts = async () => {
+  const { data, error } = await supabase.from('complaints').select('*').order('created_at', { ascending: false });
+  if (!error && data) {
+    state.posts = data.map(p => ({
+      id: p.id,
+      title: p.title,
+      category: p.category,
+      description: p.description,
+      password: p.password,
+      images: p.images || [],
+      createdAt: p.created_at
+    }));
+    renderPosts();
+  }
+};
+
+const uploadBase64Image = async (dataUrl) => {
+  try {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
+    const { data, error } = await supabase.storage.from('images').upload(fileName, blob, { contentType: 'image/jpeg' });
+    if (error) return null;
+    const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(fileName);
+    return publicUrlData.publicUrl;
+  } catch(e) {
+    return null;
+  }
 };
 
 const formatDate = (dateString, showTime = true) => {
@@ -202,10 +233,10 @@ const renderPosts = () => {
   });
 };
 
-const deletePost = (id) => {
-  state.posts = state.posts.filter(p => p.id !== id);
+const deletePost = async (id) => {
+  await supabase.from('complaints').delete().eq('id', id);
+  await fetchPosts();
   state.selectedIds = state.selectedIds.filter(idx => idx !== id);
-  saveToLocal();
   renderPosts();
 };
 
@@ -233,26 +264,40 @@ const closeDetail = () => {
   detailModal.classList.remove('active');
 };
 
-const addPost = (title, category, description, password) => {
-  const newPost = {
-    id: state.editingId || Date.now().toString(),
-    title,
-    category,
-    description,
-    password,
-    images: [...state.images],
-    createdAt: state.editingId ? state.posts.find(p => p.id === state.editingId).createdAt : new Date().toISOString()
-  };
+const addPost = async (title, category, description, password) => {
+  const submitBtn = document.querySelector('#complaint-form button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = '업로드 중...';
+  submitBtn.disabled = true;
 
-  if (state.editingId) {
-    const index = state.posts.findIndex(p => p.id === state.editingId);
-    if (index !== -1) state.posts[index] = newPost;
-  } else {
-    state.posts.push(newPost);
+  try {
+    const uploadedImageUrls = [];
+    for (const imgSrc of state.images) {
+      if (imgSrc.startsWith('http')) {
+        uploadedImageUrls.push(imgSrc);
+      } else {
+        const url = await uploadBase64Image(imgSrc);
+        if (url) uploadedImageUrls.push(url);
+      }
+    }
+
+    if (state.editingId) {
+      await supabase.from('complaints').update({
+        title, category, description, password, images: uploadedImageUrls
+      }).eq('id', state.editingId);
+    } else {
+      await supabase.from('complaints').insert([{
+        title, category, description, password, images: uploadedImageUrls
+      }]);
+    }
+  } catch (error) {
+    console.error("Error saving post:", error);
+  } finally {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
   }
   
-  saveToLocal();
-  renderPosts();
+  await fetchPosts();
   closeModal();
 };
 
@@ -697,5 +742,5 @@ complaintForm.onsubmit = (e) => {
 };
 
 // Initial Render
-renderPosts();
+fetchPosts();
 updateSlider(0);
