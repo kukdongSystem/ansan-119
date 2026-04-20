@@ -69,10 +69,21 @@ const fetchPosts = async () => {
       description: p.description,
       password: p.password,
       images: p.images || [],
+      views: p.views || 0,
       createdAt: p.created_at
     }));
     renderPosts();
   }
+};
+
+const incrementViews = async (id) => {
+  const post = state.posts.find(p => p.id === id);
+  if (!post) return;
+  post.views = (post.views || 0) + 1;
+  const card = document.querySelector(`.complaint-card[data-id="${id}"] .view-count`);
+  if (card) card.textContent = `조회수 ${post.views}`;
+  
+  await supabase.from('complaints').update({ views: post.views }).eq('id', id);
 };
 
 const uploadBase64Image = async (dataUrl) => {
@@ -175,7 +186,7 @@ const renderPosts = () => {
               <button class="btn btn-icon edit-btn" style="cursor: pointer;">수정</button>
               <button class="btn btn-icon delete-btn" style="color: #ef4444; cursor: pointer;">삭제</button>
             </div>
-            <span class="view-count">조회수 128</span>
+            <span class="view-count">조회수 ${post.views || 0}</span>
           </div>
         </div>
         
@@ -210,6 +221,7 @@ const renderPosts = () => {
       } else {
         // Just open detail in user mode
         openDetail(post);
+        incrementViews(id);
       }
     });
 
@@ -246,7 +258,7 @@ const openDetail = (post) => {
     <div class="detail-header">
       <span class="category-tag" style="background: ${colors.bg} !important; color: ${colors.text} !important; border: 1px solid rgba(0,0,0,0.05);">${post.category}</span>
       <h2 style="margin-top: 1.5rem;">${post.title}</h2>
-      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 3rem;">작성일시: ${formatDate(post.createdAt)}</p>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 3rem;">작성일시: ${formatDate(post.createdAt)} &nbsp;|&nbsp; 조회수: ${post.views || 0}</p>
     </div>
     <div class="detail-body">
       <p style="white-space: pre-wrap;">${post.description}</p>
