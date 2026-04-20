@@ -115,36 +115,69 @@ const getFixedPublicUrl = (url) => {
   return url;
 };
 
+const getExtFromMime = (mime) => {
+  if (!mime || typeof mime !== 'string') return 'jpg';
+  const m = mime.toLowerCase();
+  if (m === 'image/jpeg' || m === 'image/jpg') return 'jpg';
+  if (m === 'image/png') return 'png';
+  if (m === 'image/webp') return 'webp';
+  if (m === 'image/gif') return 'gif';
+  return 'jpg';
+};
+
+const dataUrlToBlob = (dataUrl) => {
+  const match = /^data:([^;]+);base64,(.*)$/.exec(dataUrl || '');
+  if (!match) return null;
+  const mime = match[1];
+  const base64 = match[2];
+  const binStr = atob(base64);
+  const len = binStr.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+};
+
+const downscaleImageDataUrlToJpeg = async (dataUrl, { maxSide = 1600, quality = 0.82 } = {}) => {
+  return await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const w = img.naturalWidth || img.width;
+      const h = img.naturalHeight || img.height;
+      if (!w || !h) return reject(new Error('Invalid image dimensions'));
+
+      const scale = Math.min(1, maxSide / Math.max(w, h));
+      const targetW = Math.max(1, Math.round(w * scale));
+      const targetH = Math.max(1, Math.round(h * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetW;
+      canvas.height = targetH;
+
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return reject(new Error('Canvas not supported'));
+
+      ctx.drawImage(img, 0, 0, targetW, targetH);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => reject(new Error('Image decode failed'));
+    img.src = dataUrl;
+  });
+};
+
 const uploadBase64Image = async (dataUrl) => {
   try {
-    const res = await fetch(dataUrl);
-    const blob = await res.blob();
-
-    // 실제 파일 타입을 감지하여 확장자와 contentType 설정
-    const mimeType = blob.type || 'image/jpeg';
-    const extMap = {
-      'image/jpeg': 'jpg',
-      'image/jpg': 'jpg',
-      'image/png': 'png',
-      'image/gif': 'gif',
-      'image/webp': 'webp',
-      'image/heic': 'heic',
-      'image/heif': 'heif',
-      'image/bmp': 'bmp',
-    };
-    const ext = extMap[mimeType] || 'jpg';
-
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-    const { data, error } = await supabase.storage.from('images').upload(fileName, blob, { 
-      contentType: mimeType,
-      upsert: true 
+    const resp = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataUrl })
     });
-    if (error) {
-      console.error('이미지 업로드 오류:', error);
+    if (!resp.ok) {
+      const errText = await resp.text().catch(() => '');
+      console.error('이미지 업로드 실패:', resp.status, errText);
       return null;
     }
-    const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(fileName);
-    return getFixedPublicUrl(publicUrlData.publicUrl);
+    const json = await resp.json();
+    return getFixedPublicUrl(json.publicUrl);
   } catch(e) {
     console.error('이미지 업로드 예외:', e);
     return null;
@@ -340,7 +373,12 @@ const addPost = async (title, category, description, password) => {
         uploadedImageUrls.push(imgSrc);
       } else {
         const url = await uploadBase64Image(imgSrc);
-        if (url) uploadedImageUrls.push(url);
+        if (url) {
+          uploadedImageUrls.push(url);
+        } else {
+          alert('이미지 업로드에 실패했습니다. (파일 형식/용량 문제일 수 있어요)\nJPG/PNG로 다시 시도해주세요.');
+          throw new Error('Image upload failed');
+        }
       }
     }
 
@@ -537,11 +575,21 @@ const renderPreviews = () => {
 const handleFiles = (files) => {
   const fileArray = Array.from(files);
   const remainingSlots = 5 - state.images.length;
-  fileArray.slice(0, remainingSlots).forEach(file => {
+  fileArray.slice(0, remainingSlots).forEach(async (file) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
-      state.images.push(e.target.result);
-      renderPreviews();
+    reader.onload = async (e) => {
+      try {
+        const src = e.target.result;
+        // 모바일 원본 사진(고해상도)은 업로드 실패/느림이 잦아서, 브라우저에서 디코딩 가능한 경우 JPG로 리사이즈+압축합니다.
+        const optimized = await downscaleImageDataUrlToJpeg(src, { maxSide: 1600, quality: 0.82 });
+        state.images.push(optimized);
+      } catch {
+        // 디코딩 불가(예: HEIC) 등인 경우 원본을 그대로 유지합니다.
+        // 이 경우 브라우저/환경에 따라 표시가 안 될 수 있으므로, 업로드 시 실패하면 안내합니다.
+        state.images.push(e.target.result);
+      } finally {
+        renderPreviews();
+      }
     };
     reader.readAsDataURL(file);
   });
