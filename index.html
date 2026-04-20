@@ -34,10 +34,6 @@
               <span class="logo-line-1">안산유통상가 <span class="logo-text-accent">추진위원회</span></span>
               <span class="logo-line-2">민원소통센터</span>
             </h1>
-            <div id="live-users-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.2); margin-top: 0.75rem;">
-              <span style="display: inline-block; width: 6px; height: 6px; background: #10b981; border-radius: 50%; animation: livePulse 2s infinite;"></span>
-              현재 접속자: <span id="online-count">1</span>명
-            </div>
           </div>
           <div class="nav-actions">
             <button id="admin-toggle-btn" class="btn btn-secondary">🔒 관리자 모드</button>
@@ -107,7 +103,11 @@
               <input type="date" id="end-date" class="date-input">
             </div>
           </div>
-          <div class="filter-actions" style="margin-left: auto; display: flex; gap: 0.75rem;">
+          <div class="filter-actions" style="margin-left: auto; display: flex; gap: 0.75rem; align-items: center;">
+            <div id="live-users-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.2);">
+              <span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: livePulse 2s infinite;"></span>
+              접속자: <span id="online-count">1</span>명
+            </div>
             <button id="select-all-btn" class="btn btn-secondary" style="height: 42px; padding: 0 1.25rem; font-size: 0.9rem; border-radius: 0.75rem;">✅ 전체 선택</button>
           </div>
         </div>
