@@ -94,21 +94,21 @@
           </div>
         </section>
 
-        <div id="admin-controls" class="admin-filter-bar" style="display: flex;">
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <label style="font-weight: 600; color: var(--text-primary);">📅 기간별 조회</label>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <div id="admin-controls" class="admin-filter-bar">
+          <div class="filter-group">
+            <label>📅 기간별 조회</label>
+            <div class="date-container">
               <input type="date" id="start-date" class="date-input">
-              <span style="color: var(--text-muted);">~</span>
+              <span class="date-separator">~</span>
               <input type="date" id="end-date" class="date-input">
             </div>
           </div>
-          <div class="filter-actions" style="margin-left: auto; display: flex; gap: 0.75rem; align-items: center;">
-            <div id="live-users-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.2);">
-              <span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: livePulse 2s infinite;"></span>
+          <div class="filter-actions">
+            <div id="live-users-badge">
+              <span class="live-dot"></span>
               접속자: <span id="online-count">1</span>명
             </div>
-            <button id="select-all-btn" class="btn btn-secondary" style="display: none; height: 42px; padding: 0 1.25rem; font-size: 0.9rem; border-radius: 0.75rem;">✅ 전체 선택</button>
+            <button id="select-all-btn" class="btn btn-secondary">✅ 전체 선택</button>
           </div>
         </div>
 
