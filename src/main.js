@@ -119,15 +119,34 @@ const uploadBase64Image = async (dataUrl) => {
   try {
     const res = await fetch(dataUrl);
     const blob = await res.blob();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
+
+    // 실제 파일 타입을 감지하여 확장자와 contentType 설정
+    const mimeType = blob.type || 'image/jpeg';
+    const extMap = {
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+      'image/png': 'png',
+      'image/gif': 'gif',
+      'image/webp': 'webp',
+      'image/heic': 'heic',
+      'image/heif': 'heif',
+      'image/bmp': 'bmp',
+    };
+    const ext = extMap[mimeType] || 'jpg';
+
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
     const { data, error } = await supabase.storage.from('images').upload(fileName, blob, { 
-      contentType: 'image/jpeg',
+      contentType: mimeType,
       upsert: true 
     });
-    if (error) return null;
+    if (error) {
+      console.error('이미지 업로드 오류:', error);
+      return null;
+    }
     const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(fileName);
     return getFixedPublicUrl(publicUrlData.publicUrl);
   } catch(e) {
+    console.error('이미지 업로드 예외:', e);
     return null;
   }
 };
