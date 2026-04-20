@@ -166,18 +166,31 @@ const downscaleImageDataUrlToJpeg = async (dataUrl, { maxSide = 1600, quality = 
 
 const uploadBase64Image = async (dataUrl) => {
   try {
-    const resp = await fetch('/api/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ dataUrl })
-    });
-    if (!resp.ok) {
-      const errText = await resp.text().catch(() => '');
-      console.error('이미지 업로드 실패:', resp.status, errText);
+    // base64 dataUrl → Blob 변환 (MIME 타입 자동 감지)
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+
+    const mimeType = blob.type || 'image/jpeg';
+    const extMap = {
+      'image/jpeg': 'jpg', 'image/jpg': 'jpg',
+      'image/png': 'png', 'image/gif': 'gif',
+      'image/webp': 'webp', 'image/heic': 'heic',
+      'image/heif': 'heif', 'image/bmp': 'bmp',
+    };
+    const ext = extMap[mimeType] || 'jpg';
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+
+    const { error } = await supabase.storage
+      .from('images')
+      .upload(fileName, blob, { contentType: mimeType, upsert: true });
+
+    if (error) {
+      console.error('이미지 업로드 오류:', error.message);
       return null;
     }
-    const json = await resp.json();
-    return getFixedPublicUrl(json.publicUrl);
+
+    const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(fileName);
+    return getFixedPublicUrl(publicUrlData.publicUrl);
   } catch(e) {
     console.error('이미지 업로드 예외:', e);
     return null;
