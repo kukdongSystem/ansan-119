@@ -5,6 +5,27 @@ const supabaseUrl = 'https://mqbubmrsgiixnyroqsys.supabase.co'
 const supabaseKey = 'sb_publishable_CVPwjFmjPNAEMIGrbZfQ_g_bzD5DlIO'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
+// Presence (Real-time Online Users)
+const userStatus = supabase.channel('online-users', {
+  config: { presence: { key: Math.random().toString(36).substring(2, 11) } }
+});
+
+userStatus
+  .on('presence', { event: 'sync' }, () => {
+    const newState = userStatus.presenceState();
+    let onlineCount = 0;
+    for (const id in newState) {
+      onlineCount += 1;
+    }
+    const countEl = document.getElementById('online-count');
+    if (countEl) countEl.textContent = onlineCount || 1;
+  })
+  .subscribe(async (status) => {
+    if (status === 'SUBSCRIBED') {
+      await userStatus.track({ online_at: new Date().toISOString() });
+    }
+  });
+
 // Initial State
 let state = {
   posts: [],
