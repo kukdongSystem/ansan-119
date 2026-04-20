@@ -162,13 +162,13 @@ const renderPosts = () => {
     adminToggleBtn.classList.add('active');
     adminToggleBtn.innerHTML = '🔓 관리자 모드 활성';
     printReportBtn.style.display = 'block';
-    adminControls.style.display = 'flex';
+    selectAllBtn.style.display = 'block';
   } else {
     document.body.classList.remove('admin-mode');
     adminToggleBtn.classList.remove('active');
     adminToggleBtn.innerHTML = '🔒 관리자 모드';
     printReportBtn.style.display = 'none';
-    adminControls.style.display = 'none';
+    selectAllBtn.style.display = 'none';
     state.selectedIds = [];
   }
 
