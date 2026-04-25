@@ -1019,21 +1019,30 @@ textarea::-webkit-scrollbar-thumb {
   }
 
 /* ---------------------------------------------------------
-   MOBILE OPTIMIZATIONS (v2.0.3 FOLD 4 & NARROW FIX)
+   MOBILE OPTIMIZATIONS (v2.0.4 MAXIMUM WIDTH FIX)
    --------------------------------------------------------- */
 @media (max-width: 768px) {
-  .modal-content {
-    border: none !important;
-    padding: 1rem !important;
-    width: 100% !important;
-    max-width: 100vw !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-  }
-
+  /* Ensure the backdrop doesn't squeeze the content */
   .modal-backdrop {
     padding: 0 !important;
+    display: block !important;
+    overflow-y: auto !important;
+  }
+
+  .modal-content {
+    border: none !important;
+    padding: 1rem 0.75rem !important; /* Minimal side padding */
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
   }
 
   .form-grid {
@@ -1041,6 +1050,7 @@ textarea::-webkit-scrollbar-thumb {
     flex-direction: column !important;
     gap: 1.25rem !important;
     padding: 0 !important;
+    width: 100% !important;
   }
 
   .form-group, 
@@ -1050,6 +1060,7 @@ textarea::-webkit-scrollbar-thumb {
     padding: 0 !important;
   }
 
+  /* KILL PILLS - USE SQUARE/SLIGHTLY ROUNDED CORNERS */
   input[type="text"],
   input[type="password"],
   input[type="date"],
@@ -1059,13 +1070,13 @@ textarea::-webkit-scrollbar-thumb {
     min-width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    border-radius: 4px !important; /* SQUARE CORNERS FOR FOLD 4 */
+    border-radius: 4px !important; 
     font-size: 16px !important;
     padding: 1rem !important;
     border: 1px solid #cbd5e1 !important;
     background: #fff !important;
     display: block !important;
-    -webkit-appearance: none !important; /* Remove iOS defaults */
+    -webkit-appearance: none !important;
   }
 
   .btn-primary, .btn-secondary {
@@ -1075,6 +1086,9 @@ textarea::-webkit-scrollbar-thumb {
     font-weight: 700 !important;
     border-radius: 4px !important;
     margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .form-actions {
@@ -1082,30 +1096,27 @@ textarea::-webkit-scrollbar-thumb {
     flex-direction: column !important;
     gap: 0.75rem !important;
     width: 100% !important;
-    margin-top: 1.5rem !important;
-    padding-bottom: 3rem !important;
+    margin-top: 2rem !important;
+    padding: 0 0 4rem 0 !important; /* Bottom space for mobile browsers */
+  }
+
+  /* Fixed narrow label issue */
+  label {
+    width: 100% !important;
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+    text-align: left !important;
   }
 }
 
-/* 🚨 ULTRA NARROW FIX (Galaxy Fold 4 Outer Screen) */
-@media (max-width: 320px) {
+/* 🚨 ULTRA NARROW FIX (Fold 4 Outer Screen & Note 9 Narrow Mode) */
+@media (max-width: 360px) {
   .modal-content {
-    padding: 0.5rem !important;
+    padding: 0.75rem 0.5rem !important;
   }
   
   h2 {
-    font-size: 1.25rem !important;
-    margin-bottom: 1rem !important;
-  }
-
-  label {
-    font-size: 0.85rem !important;
-    margin-bottom: 0.25rem !important;
-  }
-
-  input, select, textarea {
-    padding: 0.75rem !important;
-    font-size: 0.9rem !important;
+    font-size: 1.3rem !important;
   }
 }
 

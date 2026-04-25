@@ -9,18 +9,26 @@
   </head>
   <body>
     <div id="app">
-      <!-- v2.0.3 CACHE BUSTER & BANNER -->
-      <div id="version-banner" style="background: #ef4444; color: #fff; text-align: center; padding: 0.75rem; font-weight: bold; font-size: 1rem; position: sticky; top: 0; z-index: 9999; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        🚨 민원 소통 센터 (최신 버전 v2.0.3) - 업데이트 완료
-      </div>
-      <script>
-        // Force refresh if version is old
-        const VERSION = '2.0.3';
-        if (localStorage.getItem('app_version') !== VERSION) {
-          localStorage.setItem('app_version', VERSION);
-          window.location.reload(true);
+    <!-- VERSION BANNER (Deployment Verification) -->
+    <div id="version-banner" style="background: #10b981; color: white; padding: 12px; text-align: center; font-weight: 800; font-size: 14px; position: fixed; top: 0; width: 100%; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        ✅ v2.0.4 - MOBILE FULL-WIDTH FIX ACTIVE (Note 9 / Fold 4)
+    </div>
+
+    <script>
+        // FORCED REFRESH SCRIPT (Cache Buster)
+        const CURRENT_VERSION = "2.0.4";
+        if (localStorage.getItem("app_version") !== CURRENT_VERSION) {
+            console.log("New version detected. Clearing cache and reloading...");
+            localStorage.clear();
+            localStorage.setItem("app_version", CURRENT_VERSION);
+            location.reload(true); // Force reload from server
         }
-      </script>
+        // Auto-hide banner after 5 seconds to not obstruct UI
+        setTimeout(() => {
+            const banner = document.getElementById('version-banner');
+            if (banner) banner.style.display = 'none';
+        }, 5000);
+    </script>
       <div class="app-container">
         <!-- Header -->
         <header>
