@@ -869,21 +869,33 @@ complaintForm.onsubmit = (e) => {
 fetchPosts();
 updateSlider(0);
 
-// Prevent background scrolling when modals are open (Robust Mobile Scroll Lock)
+// Prevent background scrolling when modals are open (Robust Mobile & PC Scroll Lock)
 let scrollPosition = 0;
 const modalObserver = new MutationObserver(() => {
   const hasActiveModal = document.querySelector('.modal-backdrop.active') !== null;
-  if (hasActiveModal && document.body.style.position !== 'fixed') {
+  const isLocked = document.body.style.overflow === 'hidden';
+  
+  if (hasActiveModal && !isLocked) {
     scrollPosition = window.scrollY;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    // Only apply fixed positioning for mobile/touch to prevent scroll chaining
+    if (window.innerWidth <= 768 || ('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollPosition}px`;
+      document.body.style.width = '100%';
+    } else {
+      // For PC, use padding to prevent layout shift when scrollbar disappears
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollPosition}px`;
-    document.body.style.width = '100%';
-  } else if (!hasActiveModal && document.body.style.position === 'fixed') {
+    
+  } else if (!hasActiveModal && isLocked) {
     document.body.style.removeProperty('overflow');
     document.body.style.removeProperty('position');
     document.body.style.removeProperty('top');
     document.body.style.removeProperty('width');
+    document.body.style.removeProperty('padding-right');
     window.scrollTo(0, scrollPosition);
   }
 });
