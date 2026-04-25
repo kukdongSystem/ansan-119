@@ -869,10 +869,23 @@ complaintForm.onsubmit = (e) => {
 fetchPosts();
 updateSlider(0);
 
-// Prevent background scrolling when modals are open (Mobile Scroll Lock)
+// Prevent background scrolling when modals are open (Robust Mobile Scroll Lock)
+let scrollPosition = 0;
 const modalObserver = new MutationObserver(() => {
   const hasActiveModal = document.querySelector('.modal-backdrop.active') !== null;
-  document.body.style.overflow = hasActiveModal ? 'hidden' : '';
+  if (hasActiveModal && document.body.style.position !== 'fixed') {
+    scrollPosition = window.scrollY;
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = '100%';
+  } else if (!hasActiveModal && document.body.style.position === 'fixed') {
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('position');
+    document.body.style.removeProperty('top');
+    document.body.style.removeProperty('width');
+    window.scrollTo(0, scrollPosition);
+  }
 });
 document.querySelectorAll('.modal-backdrop').forEach(modal => {
   modalObserver.observe(modal, { attributes: true, attributeFilter: ['class'] });
