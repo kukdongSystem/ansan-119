@@ -641,39 +641,39 @@ const generateReportHtml = (posts, type) => {
 
   if (type === 'table') {
     return `
-      <div style="padding: 40px; font-family: 'Malgun Gothic', sans-serif;">
-        <h1 style="text-align: center; font-size: 24pt; margin-bottom: 10px; border-bottom: 2px solid #333; padding-bottom: 20px;">${title}</h1>
-        <p style="text-align: right; border-bottom: 1px solid #eee; padding-bottom: 10px;">발행일: ${dateStr}</p>
+      <div style="padding: 50px; font-family: 'Malgun Gothic', sans-serif;">
+        <h1 style="text-align: center; font-size: 24pt; margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 25px;">${title}</h1>
+        <p style="text-align: right; border-bottom: 1px solid #eee; padding-bottom: 15px; font-size: 11pt;">발행일: ${dateStr}</p>
         
-        <table style="width: 100%; border-collapse: collapse; margin-top: 30px;">
+        <table style="width: 100%; border-collapse: collapse; margin-top: 35px;">
           <thead>
             <tr style="background: #f8f9fa;">
-              <th style="border: 1px solid #ddd; padding: 12px; text-align: center; width: 50px;">번호</th>
-              <th style="border: 1px solid #ddd; padding: 12px; text-align: center; width: 130px;">현장사진</th>
-              <th style="border: 1px solid #ddd; padding: 12px; text-align: center; width: 100px;">날짜</th>
-              <th style="border: 1px solid #ddd; padding: 12px; text-align: center; width: 100px;">분류</th>
-              <th style="border: 1px solid #ddd; padding: 12px; text-align: center; width: 80px;">작성자</th>
-              <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">민원 제목 및 내용</th>
+              <th style="border: 1px solid #ddd; padding: 14px 10px; text-align: center; width: 50px; font-size: 10pt;">번호</th>
+              <th style="border: 1px solid #ddd; padding: 14px 10px; text-align: center; width: 160px; font-size: 10pt;">현장사진</th>
+              <th style="border: 1px solid #ddd; padding: 14px 10px; text-align: center; width: 110px; font-size: 10pt;">날짜</th>
+              <th style="border: 1px solid #ddd; padding: 14px 10px; text-align: center; width: 110px; font-size: 10pt;">분류</th>
+              <th style="border: 1px solid #ddd; padding: 14px 10px; text-align: center; width: 90px; font-size: 10pt;">작성자</th>
+              <th style="border: 1px solid #ddd; padding: 14px 16px; text-align: left; font-size: 10pt;">민원 제목 및 내용</th>
             </tr>
           </thead>
           <tbody>
             ${posts.slice(0, -1).map((post, index) => `
               <tr style="page-break-inside: avoid;">
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${index + 1}</td>
-                <td style="border: 1px solid #ddd; padding: 10px; text-align: center; vertical-align: middle;">
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${index + 1}</td>
+                <td style="border: 1px solid #ddd; padding: 14px; text-align: center; vertical-align: middle;">
                   ${post.images && post.images.length > 0 
-                    ? `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 4px; justify-content: center; align-items: center; width: 130px;">
+                    ? `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; justify-content: center; align-items: center; width: 150px; margin: 0 auto;">
                         ${post.images.map(img => `<img src="${img}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; border: 1px solid #eee; display: block;">`).join('')}
                        </div>`
-                    : `<span style="color: #999; font-size: 8pt;">사진없음</span>`
+                    : `<span style="color: #999; font-size: 9pt;">사진없음</span>`
                   }
                 </td>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${formatDate(post.createdAt, false)}</td>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${post.category}</td>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${post.author}</td>
-                <td style="border: 1px solid #ddd; padding: 15px; text-align: left;">
-                  <div style="font-weight: bold; font-size: 11pt; margin-bottom: 5px;">${post.title}</div>
-                  <div style="font-size: 9pt; color: #444; white-space: pre-wrap;">${post.description}</div>
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${formatDate(post.createdAt, false)}</td>
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${post.category}</td>
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${post.author}</td>
+                <td style="border: 1px solid #ddd; padding: 20px; text-align: left;">
+                  <div style="font-weight: bold; font-size: 12pt; margin-bottom: 8px; color: #1e293b;">${post.title}</div>
+                  <div style="font-size: 10pt; color: #444; white-space: pre-wrap; line-height: 1.6;">${post.description}</div>
                 </td>
               </tr>
             `).join('')}
@@ -684,27 +684,27 @@ const generateReportHtml = (posts, type) => {
               const index = posts.length - 1;
               return `
               <tr>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${index + 1}</td>
-                <td style="border: 1px solid #ddd; padding: 10px; text-align: center; vertical-align: middle;">
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${index + 1}</td>
+                <td style="border: 1px solid #ddd; padding: 14px; text-align: center; vertical-align: middle;">
                   ${post.images && post.images.length > 0 
-                    ? `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 4px; justify-content: center; align-items: center; width: 130px;">
+                    ? `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; justify-content: center; align-items: center; width: 150px; margin: 0 auto;">
                         ${post.images.map(img => `<img src="${img}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; border: 1px solid #eee; display: block;">`).join('')}
                        </div>`
-                    : `<span style="color: #999; font-size: 8pt;">사진없음</span>`
+                    : `<span style="color: #999; font-size: 9pt;">사진없음</span>`
                   }
                 </td>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${formatDate(post.createdAt, false)}</td>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${post.category}</td>
-                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${post.author}</td>
-                <td style="border: 1px solid #ddd; padding: 15px; text-align: left;">
-                  <div style="font-weight: bold; font-size: 11pt; margin-bottom: 5px;">${post.title}</div>
-                  <div style="font-size: 9pt; color: #444; white-space: pre-wrap;">${post.description}</div>
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${formatDate(post.createdAt, false)}</td>
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${post.category}</td>
+                <td style="border: 1px solid #ddd; padding: 16px 10px; text-align: center; font-size: 10pt;">${post.author}</td>
+                <td style="border: 1px solid #ddd; padding: 20px; text-align: left;">
+                  <div style="font-weight: bold; font-size: 12pt; margin-bottom: 8px; color: #1e293b;">${post.title}</div>
+                  <div style="font-size: 10pt; color: #444; white-space: pre-wrap; line-height: 1.6;">${post.description}</div>
                 </td>
               </tr>
               `;
             })() : ''}
             <tr>
-              <td colspan="5" style="border: none; padding-top: 50px; padding-bottom: 20px; text-align: center; font-size: 14pt; font-weight: bold;">안산유통상가 추진위원회 귀중</td>
+              <td colspan="6" style="border: none; padding-top: 60px; padding-bottom: 25px; text-align: center; font-size: 14pt; font-weight: bold;">안산유통상가 추진위원회 귀중</td>
             </tr>
           </tbody>
         </table>
