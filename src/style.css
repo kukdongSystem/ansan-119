@@ -585,142 +585,91 @@ header {
   margin-left: 0.5rem;
 }
 
+/* Animations */
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
 /* Responsive Enhancements */
 @media (max-width: 1024px) {
   .complaints-grid { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
-  .modal-content { max-width: 90%; padding: 3rem; }
+  .modal-content { max-width: 90%; }
 }
 
 @media (max-width: 768px) {
   header { 
     flex-direction: column; 
-    gap: 1.5rem; 
-    padding: 1.5rem; 
-    border-radius: 2rem;
+    gap: 1.25rem; 
+    padding: 1.25rem; 
+    border-radius: 1.5rem;
     margin: 1rem 0 2rem;
+    text-align: center;
+  }
+  
+  .logo-section h1 {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 1.25rem;
+  }
+
+  .logo-line-2 {
+    font-size: 0.9rem;
+    opacity: 0.8;
   }
   
   .nav-actions { 
     width: 100%; 
-    justify-content: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
   
-  #open-modal-btn { width: 100%; order: -1; }
+  #open-modal-btn { 
+    grid-column: 1 / -1;
+    width: 100%; 
+    padding: 0.85rem;
+    font-size: 1rem;
+    order: -1;
+    border-radius: 12px;
+  }
 
-  .app-container { padding: 0 0.75rem 2rem; }
+  #admin-toggle-btn, #print-report-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .app-container { padding: 0 1rem 2rem; }
   
-  .hero-slider { height: 400px; }
-  .slide-content h1 { font-size: 1.75rem; }
-  .slide-content p { font-size: 1rem; }
+  .hero-slider { height: 350px; border-radius: 1.5rem; margin-bottom: 2.5rem; }
+  .slide-content h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+  .slide-content p { font-size: 0.95rem; }
 
   .modal-content { 
-    padding: 0; /* 내부 scroll-area에서 패딩을 관리하도록 변경 */
     border-radius: 2rem; 
     width: 95%;
   }
 
   .modal-scroll-area {
-    padding: 2rem 1.5rem; /* 모바일 전용 패딩 적용 */
+    padding: 2.5rem 1.5rem; 
   }
 
-  .modal-content h2 { font-size: 1.75rem; margin-bottom: 2rem; }
+  .modal-content h2 { font-size: 1.85rem; margin-bottom: 2rem; }
   
-  .form-grid { gap: 1.25rem; }
+  .form-grid { gap: 1rem; }
   
-  .form-actions { flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .form-actions { flex-direction: column; gap: 0.75rem; margin-top: 2.5rem; }
+  .form-actions .btn { padding: 1.25rem; }
   
-  .complaint-card { padding: 1.5rem; border-radius: 1.5rem; }
-  .card-images-preview { margin: 1.5rem -1.5rem -1.5rem; border-radius: 0 0 1.5rem 1.5rem; }
-  .card-content h3 { font-size: 1.2rem; }
+  .complaint-card { padding: 1.75rem; border-radius: 1.75rem; gap: 1.5rem; }
+  .card-images-preview { height: 200px; margin: 1.5rem -1.75rem -1.75rem; border-radius: 0 0 1.75rem 1.75rem; }
+  .card-content h3 { font-size: 1.25rem; }
   
   .main-footer { margin-top: 4rem; padding: 3rem 1rem; }
-  .main-footer p { font-size: 0.8rem; }
-}
-
-@media (max-width: 768px) {
-  header {
-    display: block !important;
-    padding: 1.5rem 1rem !important;
-    text-align: center !important;
-  }
-
-  .logo-section {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: 1.2rem !important;
-  }
-
-  .logo-section h1 { 
-    display: block !important;
-    font-size: 1.1rem !important;
-    line-height: 1.5 !important;
-    width: 100% !important;
-    text-align: center !important;
-    margin: 0 !important;
-  }
-  
-  .logo-line-1, .logo-line-2 {
-    display: block !important;
-    width: 100% !important;
-    white-space: nowrap !important;
-    margin: 0 !important;
-    clear: both !important;
-  }
-
-  .logo-dot {
-    display: none !important;
-  }
-
-  .nav-actions { 
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.75rem !important; 
-    width: 100% !important;
-    margin-top: 1.5rem !important;
-  }
-
-  .admin-only-controls {
-    width: 100% !important;
-    justify-content: center !important;
-    margin-bottom: 0.25rem !important;
-    display: flex !important;
-    gap: 0.5rem;
-  }
-
-  .nav-actions .btn { 
-    font-size: 0.95rem !important; 
-    padding: 0.8rem 1.5rem !important; 
-    width: 100% !important;
-    height: 52px !important;
-    border-radius: 1rem !important;
-    font-weight: 600 !important;
-  }
-
-  /* Admin Specific UI - Positioned to not overlap tags */
-  .admin-checkbox-wrapper {
-    position: absolute;
-    top: 50%;
-    right: 1.5rem;
-    transform: translateY(-50%);
-    z-index: 5;
-    background: var(--primary-color);
-    padding: 6px;
-    border-radius: 50%;
-    display: flex;
-    box-shadow: var(--shadow-md);
-  }
-
-  .admin-checkbox {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    accent-color: white;
-  }
-  
-  .hero-slider { height: 420px; }
-  .slide-content h1 { font-size: 1.4rem; }
 }
 
 /* Admin Specific UI */
