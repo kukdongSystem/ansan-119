@@ -1019,75 +1019,74 @@ textarea::-webkit-scrollbar-thumb {
   }
 
 /* ---------------------------------------------------------
-   MOBILE OPTIMIZATIONS (Aggressive Overrides)
+   MOBILE OPTIMIZATIONS (v2.0.2 FINAL WIDE FIX)
    --------------------------------------------------------- */
 @media (max-width: 768px) {
-  /* DEBUG: If you see a BLUE BORDER, this CSS is loading correctly (v2.0.1) */
+  /* Remove the debug border, use a clean look but keep it WIDE */
   .modal-content {
-    border: 8px solid #3b82f6 !important; /* Thick Blue Border */
-    padding: 2rem 1.5rem !important;
-    width: 98% !important;
-    max-width: 98% !important;
-    margin: 0.5rem auto !important;
-    border-radius: 20px !important;
+    border: none !important;
+    padding: 1rem !important; /* Minimum padding */
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: 100vh !important; /* Full screen on mobile */
+    margin: 0 !important;
+    border-radius: 0 !important; /* Full screen needs no radius */
+  }
+
+  .modal-backdrop {
+    padding: 0 !important;
+    display: flex !important;
+    align-items: flex-start !important;
   }
 
   .form-grid {
     display: flex !important;
     flex-direction: column !important;
     gap: 1.5rem !important;
+    padding: 0.5rem !important;
   }
 
-  /* KILL THE PILL SHAPE & FORCE FULL WIDTH */
-  /* We target all possible form elements and their containers */
+  /* FORCE 100% WIDTH - NO EXCEPTIONS */
+  .form-group, 
+  .form-group.full-width {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   input[type="text"],
   input[type="password"],
   input[type="date"],
   select, 
-  textarea, 
-  button.btn,
-  .form-group, 
-  .form-group.full-width {
+  textarea {
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    border-radius: 8px !important; /* SQUARE CORNERS, NOT PILLS */
-    font-size: 16px !important; /* Fix iOS zoom-in behavior */
+    border-radius: 12px !important; /* Soft corners, NOT pills */
+    font-size: 16px !important;
     padding: 1.2rem 1rem !important;
-    margin: 0 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #f8fafc !important;
     display: block !important;
   }
 
-  /* Specific fix for inputs that might be shrinking */
-  .form-group input {
-    height: 3.5rem !important;
+  .btn-primary, .btn-secondary {
+    width: 100% !important;
+    height: 3.8rem !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    margin: 0 !important;
   }
 
-  /* SPECIFIC BUTTON OVERRIDES */
   .form-actions {
     display: flex !important;
     flex-direction: column !important;
     gap: 1rem !important;
     width: 100% !important;
-    margin-top: 1.5rem !important;
-  }
-
-  .btn-primary, .btn-secondary {
-    height: 4rem !important;
-    width: 100% !important;
-    font-size: 1.1rem !important;
-    font-weight: 700 !important;
-    border-radius: 12px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  /* MODAL SCROLLING */
-  .modal-scroll-area {
-    padding: 0 !important;
-    overflow-x: hidden !important;
+    margin-top: 2rem !important;
+    padding: 0 0.5rem 2rem !important;
   }
 }
 
