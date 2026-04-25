@@ -868,3 +868,12 @@ complaintForm.onsubmit = (e) => {
 // Initial Render
 fetchPosts();
 updateSlider(0);
+
+// Prevent background scrolling when modals are open (Mobile Scroll Lock)
+const modalObserver = new MutationObserver(() => {
+  const hasActiveModal = document.querySelector('.modal-backdrop.active') !== null;
+  document.body.style.overflow = hasActiveModal ? 'hidden' : '';
+});
+document.querySelectorAll('.modal-backdrop').forEach(modal => {
+  modalObserver.observe(modal, { attributes: true, attributeFilter: ['class'] });
+});
