@@ -1,6 +1,6 @@
 {
   "name": "ansan-complaint-portal",
-  "version": "0.0.1",
+  "version": "2.0.5",
   "private": true,
   "type": "module",
   "scripts": {
