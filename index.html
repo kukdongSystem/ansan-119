@@ -9,18 +9,18 @@
   </head>
   <body>
     <div id="app">
-    <!-- VERSION BANNER (v2.0.7 FINAL FIX) -->
+    <!-- VERSION BANNER (v2.0.8 ULTIMATE CONTRAST FIX) -->
     <div id="version-banner" style="background: #ef4444; color: white; padding: 15px; text-align: center; font-weight: 900; font-size: 15px; position: fixed; top: 0; width: 100%; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-bottom: 3px solid #b91c1c;">
-        🔥 v2.0.7 - 관리자 보고서 및 색상 대비 긴급 패치 완료 (반드시 확인)
+        🔥 v2.0.8 - 글씨 안보임 문제 및 색상 대비 2차 긴급 패치 (최종 확인)
     </div>
 
     <script>
         // FORCED REFRESH SCRIPT (Maximum Power)
-        const CURRENT_VERSION = "2.0.7";
+        const CURRENT_VERSION = "2.0.8";
         if (localStorage.getItem("app_version") !== CURRENT_VERSION) {
             localStorage.clear();
             localStorage.setItem("app_version", CURRENT_VERSION);
-            console.log("Upgrading to v2.0.6. Bypassing cache...");
+            console.log("Upgrading to v2.0.8. Bypassing cache...");
             window.location.replace(window.location.origin + window.location.pathname + '?v=' + Date.now());
         }
         setTimeout(() => {
@@ -236,7 +236,7 @@
 
         <footer class="main-footer">
           <p>&copy; 2026 COPYRIGHT <span class="footer-brand">KUKDONG SYSTEM</span>. ALL RIGHTS RESERVED.</p>
-          <p style="font-size: 0.7rem; opacity: 0.3; margin-top: 0.5rem;">UI Version: 2.0.3 (Fold 4 Optimized)</p>
+          <p style="font-size: 0.7rem; opacity: 0.3; margin-top: 0.5rem;">UI Version: 2.0.8 (Contrast Optimized)</p>
         </footer>
       </div>
     </div>

@@ -36,24 +36,53 @@
   .complaint-card { background: #1e293b; }
 }
 
-/* NUCLEAR TEXT COLOR FIX */
+/* ULTIMATE CONTRAST FIX (v2.0.8) */
+.modal-content, 
+.verify-modal .modal-content,
+#complaint-modal .modal-content,
+#detail-modal .modal-content,
+#print-option-modal .modal-content {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
 .modal-content h2, 
-.modal-content .modal-title,
+.modal-content h3,
 .modal-content label,
-.verify-modal h2,
-.verify-modal p {
-  color: var(--text-primary) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+.modal-content p,
+.modal-content span,
+.modal-content .form-helper-text,
+#detail-content *,
+.admin-filter-bar label,
+.admin-filter-bar #live-users-badge {
+    color: #0f172a !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix placeholders */
+::placeholder { color: #64748b !important; opacity: 1 !important; }
+:-ms-input-placeholder { color: #64748b !important; }
+::-ms-input-placeholder { color: #64748b !important; }
+
+/* Filter Bar Specific */
+.admin-filter-bar {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.admin-filter-bar label {
+    color: #0f172a !important;
+    font-weight: 800 !important;
 }
 
 @media (prefers-color-scheme: dark) {
-  .modal-content h2, 
-  .modal-content .modal-title,
-  .modal-content label,
-  .verify-modal h2,
-  .verify-modal p {
-    color: #f8fafc !important;
+  /* In dark mode, we still want the MODALS to be white/dark-text for maximum legibility as requested */
+  /* unless the user specifically wants a dark theme. Given the 'invisible' complaint, we force contrast. */
+  .modal-content, .admin-filter-bar {
+      background: #ffffff !important;
+  }
+  .modal-content h2, .modal-content label, .admin-filter-bar label {
+      color: #0f172a !important;
   }
 }
 
